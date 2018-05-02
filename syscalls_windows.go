@@ -307,6 +307,6 @@ func Start(ipNet net.IPNet, dev string) {
 	args[6] = fmt.Sprintf("addr=%s", ipNet.IP)
 	args[7] = fmt.Sprintf("mask=%d.%d.%d.%d", ipNet.Mask[0], ipNet.Mask[1], ipNet.Mask[2], ipNet.Mask[3])
 	cmd := exec.Command("netsh", args...)
-	err := cmd.Run()
+	cmd.Run()
 	return
 }

@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/exec"
 	// "strings"
@@ -43,13 +44,21 @@ func main() {
 		DeviceType: taptun.TAP,
 	}
 
+	var (
+		self = net.IPv4(192, 168, 1, 85)
+		mask = net.IPv4Mask(255, 255, 255, 0)
+		brd  = net.IPv4(10, 0, 42, 255)
+	)
+
 	iface, err := taptun.New(config)
 	checkFatalErr(err, "Unable to allocate TUN interface: ")
 	log.Println("Interface allocated: ", iface.Name())
 
-	runIP("link", "set", "dev", iface.Name(), "mtu", MTU)
-	runIP("addr", "add", "192.168.1.85/24", "dev", iface.Name())
-	runIP("link", "set", "dev", iface.Name(), "up")
+	taptun.Start(net.IPNet{IP: self, Mask: mask}, iface.Name())
+
+	// runIP("link", "set", "dev", iface.Name(), "mtu", MTU)
+	// runIP("addr", "add", "192.168.1.85/24", "dev", iface.Name())
+	// runIP("link", "set", "dev", iface.Name(), "up")
 
 	packet := make([]byte, BUFFERSIZE)
 

@@ -3,7 +3,9 @@
 package taptun
 
 import (
+	"net"
 	"os"
+	"os/exec"
 	"strings"
 	"syscall"
 	"unsafe"
@@ -115,4 +117,13 @@ func setDeviceOptions(fd uintptr, config Config) (err error) {
 	}
 	return ioctl(fd, syscall.TUNSETPERSIST, uintptr(value))
 
+}
+
+func Start(ipNet net.IPNet, dev string) {
+	if err := exec.Command("ip", "link", "set", dev, "up").Run(); err != nil {
+		return
+	} else {
+		err = exec.Command("ip", "addr", "add", ipNet.String(), "dev", dev).Run()
+		return
+	}
 }

@@ -10,8 +10,7 @@ import (
 
 	// "fastvpn/common"
 	"taptun"
-
-	"github.com/songgao/water"
+	// "github.com/songgao/water"
 )
 
 const (
@@ -40,11 +39,11 @@ func runIP(args ...string) {
 }
 
 func main() {
-	config := water.Config{
-		DeviceType: water.TAP,
+	config := taptun.Config{
+		DeviceType: taptun.TAP,
 	}
 
-	iface, err := water.New(config)
+	iface, err := taptun.New(config)
 	checkFatalErr(err, "Unable to allocate TUN interface: ")
 	log.Println("Interface allocated: ", iface.Name())
 

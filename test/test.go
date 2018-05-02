@@ -47,7 +47,7 @@ func main() {
 	var (
 		self = net.IPv4(192, 168, 1, 85)
 		mask = net.IPv4Mask(255, 255, 255, 0)
-		brd  = net.IPv4(10, 0, 42, 255)
+		// brd  = net.IPv4(10, 0, 42, 255)
 	)
 
 	iface, err := taptun.New(config)

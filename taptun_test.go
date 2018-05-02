@@ -37,7 +37,7 @@ func TestTAP(t *testing.T) {
 	}
 
 	setupIfce(t, net.IPNet{IP: self, Mask: mask}, ifce.Name())
-	// startBroadcast(t, brd)
+	startBroadcast(t, brd)
 
 	dataCh := make(chan []byte, 8)
 	startRead(dataCh, ifce)
@@ -121,15 +121,13 @@ readFrame:
 			// if !waterutil.IPv4Source(packet).Equal(self) {
 			// 	continue readFrame
 			// }
-			// if !waterutil.IPv4Destination(packet).Equal(brd) {
-			// 	continue readFrame
-			// }
-			if waterutil.IPv4Protocol(packet) != waterutil.UDP {
+			if !waterutil.IPv4Destination(packet).Equal(self) {
 				continue readFrame
 			}
-			if waterutil.IPv4Protocol(packet) != waterutil.UDP {
+			if waterutil.IPv4Protocol(packet) != waterutil.ICMP {
 				continue readFrame
 			}
+
 			// t.Logf("received broadcast frame: %#v\n", packet)
 			fmt.Println("received packet ", packet)
 			continue readFrame

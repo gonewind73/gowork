@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
 	"time"
+)
+
+const (
+	BUFFERSIZE = 1522
+	MTU        = "1500"
 )
 
 func main() {
@@ -22,9 +26,10 @@ func main() {
 			continue
 		}
 		fmt.Println(conn.RemoteAddr(), conn.LocalAddr())
-		result, err := ioutil.ReadAll(conn)
+		buffer := make([]byte, BUFFERSIZE)
+		_, err = conn.Read(buffer)
 		checkError(err)
-		fmt.Println(string(result))
+		fmt.Println(string(buffer))
 		daytime := time.Now().String()
 		conn.Write([]byte(daytime)) // don't care about return value
 		time.Sleep(1)

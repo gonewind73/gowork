@@ -27,9 +27,9 @@ func main() {
 		}
 		fmt.Println(conn.RemoteAddr(), conn.LocalAddr())
 		buffer := make([]byte, BUFFERSIZE)
-		len, err = conn.Read(buffer)
+		blen, err := conn.Read(buffer)
 		checkError(err)
-		fmt.Println(string(buffer[:len]))
+		fmt.Println(string(buffer[:blen]))
 		daytime := time.Now().String()
 		conn.Write([]byte(daytime)) // don't care about return value
 		time.Sleep(1)

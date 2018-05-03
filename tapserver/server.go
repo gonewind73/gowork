@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -21,6 +22,9 @@ func main() {
 			continue
 		}
 		fmt.Println(conn.RemoteAddr(), conn.LocalAddr())
+		result, err := ioutil.ReadAll(conn)
+		checkError(err)
+		fmt.Println(string(result))
 		daytime := time.Now().String()
 		conn.Write([]byte(daytime)) // don't care about return value
 		time.Sleep(1)

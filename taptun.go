@@ -24,6 +24,7 @@ const (
 	_ = iota
 	TUN
 	TAP
+	BUFFERSIZE = 1522
 )
 
 // Config defines parameters required to create a TUN/TAP interface. It's only
@@ -79,4 +80,19 @@ func (ifce *Interface) IsTAP() bool {
 // Name returns the interface name of ifce, e.g. tun0, tap1, tun0, etc..
 func (ifce *Interface) Name() string {
 	return ifce.name
+}
+
+func (ifce *Interface) ToChan(ch chan<- []byte) {
+	// ch = make(chan []byte, 8)
+	go func() {
+		for {
+			buffer := make([]byte, BUFFERSIZE)
+			n, err := ifce.Read(buffer)
+			if err == nil {
+				buffer = buffer[:n:n]
+				ch <- buffer
+			}
+		}
+	}()
+	return
 }

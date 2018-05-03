@@ -23,7 +23,8 @@ func main() {
 		fmt.Println(conn.RemoteAddr(), conn.LocalAddr())
 		daytime := time.Now().String()
 		conn.Write([]byte(daytime)) // don't care about return value
-		conn.Close()                // we're finished with this client
+		time.Sleep(1)
+		conn.Close() // we're finished with this client
 	}
 	fmt.Println(err)
 }

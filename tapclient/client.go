@@ -22,8 +22,10 @@ func main() {
 	checkError(err)
 	// _, err = conn.Write([]byte("HEAD / HTTP/1.0\r\n\r\n"))
 	checkError(err)
-	ifce := prepare()
-	exchange(*ifce, conn)
+	if err == nil {
+		ifce := prepare()
+		exchange(*ifce, conn)
+	}
 
 	// buffer := make([]byte, 1522)
 	// for {
@@ -90,10 +92,10 @@ func exchange(iface taptun.Interface, conn net.Conn) {
 	for {
 		select {
 		case buffer := <-ifchan:
-			fmt.Println(buffer)
+			fmt.Println("local", buffer)
 			conn.Write(buffer)
 		case buffer := <-connchan:
-			fmt.Println(buffer)
+			fmt.Println("peer", buffer)
 			iface.Write(buffer)
 			// case <-timeout:
 			//   t.Fatal("Waiting for broadcast packet timeout")
